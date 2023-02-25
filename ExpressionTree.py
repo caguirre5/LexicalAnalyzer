@@ -3,7 +3,7 @@ from node import Node
 
 def buildTreeExpression(postfix):
     stack = []
-    ops = ['*', '+', '|', '.']
+    ops = ['?', '*', '+', '|', '.']
     for token in postfix:
         if token not in ops:
             node = Node(token)
@@ -11,11 +11,11 @@ def buildTreeExpression(postfix):
         else:
             node = Node(token)
             node.right = stack.pop()
-            if token == '*' or token == '+':
+            if token == '*' or token == '+' or token == '?':
                 left = None
             else:
                 left = stack.pop()
             node.left = left
             stack.append(node)
-        print('vamos por el token: ', token)
+    stack[0].isRoot = True
     return stack.pop()
