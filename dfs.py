@@ -1,21 +1,29 @@
-from graphviz import Digraph
+import tkinter as tk
 
 
-def dfs(node):
-    if node:
-        dfs(node.left)
-        dfs(node.right)
+def submit_input():
+    input_value = input_field.get()
+    print(f"You submitted: {input_value}")
 
 
-g = Digraph('NFA', filename='nfa.gv', format='png')
-g.attr(rankdir='LR')
+# Crear la ventana
+window = tk.Tk()
+window.geometry("200x100")
 
-g.node('0', shape='invtriangle', dir='back')
-g.node('1', shape='circle')
-g.node('2', shape='circle')
-# ...node [shape=doublecircle style=filled fillcolor=white]
-g.edge('0', '1', label='a')
-g.edge('1', '2', label='b')
-g.edge('1', '2', label='b')
-# ...
-g.view()
+# Centrar la ventana en la pantalla
+window.eval('tk::PlaceWindow . center')
+
+# Definir las instrucciones
+instructions_label = tk.Label(window, text="Ingrese una expresión regular:")
+instructions_label.pack()
+
+# Definir el input field
+input_field = tk.Entry(window)
+input_field.pack()
+
+# Definir el botón de submit
+submit_button = tk.Button(window, text="Submit", command=submit_input)
+submit_button.pack()
+
+# Mostrar la ventana
+window.mainloop()

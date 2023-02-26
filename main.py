@@ -1,15 +1,12 @@
-import node
-import toPostfix
+import textHandler
 import ExpressionTree
-import afn
 from afn import ThompsonNFA
 
-infix = "(a|b)*a(a|b)(a|b)"  # Aun hay que averiguar
-infix = toPostfix.input_transform(infix)
-postfix = toPostfix.infix_to_postfix(infix)
+while True:
+    infix = input("Ingrese una expresion regular: ")
+    # "(a|b)*a(a|b)(a|b)"
+    if textHandler.is_valid_regex(infix):
+        postfix = textHandler.infix_to_postfix(infix)
+        tree = ExpressionTree.buildTreeExpression(postfix)
 
-print(postfix)
-tree = ExpressionTree.buildTreeExpression(postfix)
-
-nfa = ThompsonNFA(tree)
-AFN = nfa.getAFN()
+        ThompsonNFA(tree).getAFN()

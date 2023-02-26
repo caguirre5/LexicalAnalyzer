@@ -110,7 +110,7 @@ class ThompsonNFA:
         return
 
     def getAFN(self):
-        g = Digraph('NFA', filename='nfa.gv', format='png')
+        g = Digraph('NFA', filename='nfa', format='png')
         g.attr(rankdir='LR')
 
         AFN = self.stack.pop()
