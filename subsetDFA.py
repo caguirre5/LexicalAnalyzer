@@ -13,10 +13,11 @@ class Subset:
 
 
 class AFD:
-    def __init__(self, start=None, end=None):
+    def __init__(self, start=None, end=None, alphabet=None):
         self.start = start
         self.end = end
         self.states = []
+        self.alphabet = alphabet
 
 # Recibe un automata no determinista
 
@@ -85,7 +86,7 @@ class SubsetConstruction:
                 # Si no, se agrega al conjunto de estados del automata
                 states.append(state)
         states.extend(end)
-        automaton = AFD(start, end)
+        automaton = AFD(start, end, self.alphabet)
         automaton.states.extend(states)
         self.DFA.append(automaton)
 
