@@ -6,12 +6,6 @@ class State:
         self.subset = subset
 
 
-class Subset:
-    def __init__(self, subset):
-        self.subset = subset
-        self.transitions = []
-
-
 class AFD:
     def __init__(self, start=None, end=None):
         self.start = start
@@ -24,6 +18,16 @@ class AFD:
 class SubsetConstruction:
     def __init__(self, DFA):
         self.DFA = DFA
-        self.G1 = DFA.end
-        self.G2 = DFA.state
+        self.Gs = [DFA.end]
+        self.G2 = DFA.states
         self.G2.remove(DFA.end)
+        self.Gs.append(self.G2)
+
+    def minimization(self):
+        while True:
+            for Subset in self.Gs:
+                for symbol in self.DFA.alphabet:
+                    for state in Subset:
+                        for transition in state.transitions:
+                            if transition[0] == symbol:
+                                pass
