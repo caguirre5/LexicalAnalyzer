@@ -11,11 +11,13 @@ class AFN:
     def __init__(self, start=None, end=None):
         self.start = start
         self.end = end
+        self.alphabet = None
         self.states = [self.start, self.end]
 
 
 class ThompsonNFA:
-    def __init__(self, expression_tree):
+    def __init__(self, expression_tree, alphabet):
+        self.alphabet = alphabet
         self.states = []
         self.current_label = 0
         self.stack = []
@@ -110,21 +112,8 @@ class ThompsonNFA:
         return
 
     def getAFN(self):
-        g = Digraph('NFA', filename='nfa', format='png')
-        g.attr(rankdir='LR')
-
         AFN = self.stack.pop()
-        for state in self.states:
-            if state == AFN.end:
-                g.node(str(state.label), shape='doublecircle', rank='same')
-            elif state == AFN.start:
-                g.node(str(state.label), shape='circle',
-                       style='filled', fillcolor='green', rank='same')
-            else:
-                g.node(str(state.label), shape='circle')
-            # ('edge label', 'end')
-            for tran in state.transitions:
-                g.edge(str(state.label), str(
-                    tran[1].label), label=str(tran[0]))
-        g.view()
+        AFN.alphabet = self.alphabet
+        AFN.states.clear()
+        AFN.states.extend(self.states)
         return AFN

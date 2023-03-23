@@ -11,6 +11,7 @@ def infix_to_postfix(exp):
     precedence = {'*': 3, '+': 3, '?': 3, '.': 2, '|': 1}
     postfix = []
     stack = []
+    alphabet = []
 
     for char in infix:
         if char in list(precedence.keys()):
@@ -25,11 +26,13 @@ def infix_to_postfix(exp):
             stack.pop()
         else:
             postfix.append(char)
+            if char not in alphabet and char != 'ε':
+                alphabet.append(char)
 
     while stack:
         postfix.append(stack.pop())
 
-    return ''.join(postfix)
+    return ''.join(postfix), alphabet
 
 
 def input_transform(exp):
