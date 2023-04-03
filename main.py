@@ -1,10 +1,11 @@
 import textHandler
 import ExpressionTree
-from afn import ThompsonNFA
+from ThompsonNFA import ThompsonNFA
 from drawAutomaton import getNFA, getDFA
+from drawTree import buildGraph
 from subsetDFA import SubsetConstruction
 from simulacion import simulate_afd, simulate_afn
-from directAFD import construct_afd
+from directDFA import construct_afd
 from minimize import minimize_afd
 
 while True:
@@ -14,6 +15,8 @@ while True:
     if textHandler.is_valid_regex(infix):
         postfix, alphabet = textHandler.infix_to_postfix(infix)
         tree = ExpressionTree.buildTreeExpression(postfix)
+
+        buildGraph(tree).view()
 
         NFA = ThompsonNFA(tree, alphabet).getAFN()
         DFA = SubsetConstruction(NFA).getDFA()

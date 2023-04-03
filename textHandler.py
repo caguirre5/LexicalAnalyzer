@@ -35,6 +35,37 @@ def infix_to_postfix(exp):
     return ''.join(postfix), alphabet
 
 
+def infix_to_postfix2(exp):
+    infix = input_transform(exp)
+    precedence = {'*': 3, '+': 3, '?': 3, '.': 2, '|': 1}
+    postfix = []
+    stack = []
+    alphabet = []
+
+    expression = ''
+
+    for char in infix:
+        if char in list(precedence.keys()):
+            while stack and stack[-1] != '(' and precedence.get(stack[-1], 0) >= precedence[char]:
+                postfix.append(stack.pop())
+            stack.append(char)
+        elif char == '(':
+            stack.append(char)
+        elif char == ')':
+            while stack and stack[-1] != '(':
+                postfix.append(stack.pop())
+            stack.pop()
+        else:
+            postfix.append(char)
+            if char not in alphabet and char != 'ε':
+                alphabet.append(char)
+
+    while stack:
+        postfix.append(stack.pop())
+
+    return ''.join(postfix), alphabet
+
+
 def input_transform(exp):
     # Agregar concatenación implícita
     exp = exp.strip()
