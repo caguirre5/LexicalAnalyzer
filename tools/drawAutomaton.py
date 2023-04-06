@@ -2,7 +2,7 @@ from graphviz import Digraph
 
 
 def getNFA(NFA):
-    g = Digraph('NFA', filename='nfa', format='png')
+    g = Digraph('NFA', filename='./ImageResults/NFA', format='png')
     g.attr(rankdir='LR')
     for state in NFA.states:
         if state == NFA.end:
@@ -21,7 +21,7 @@ def getNFA(NFA):
 
 
 def getDFA(DFA):
-    g = Digraph('DFA', filename='dfa', format='png')
+    g = Digraph('DFA', filename='./ImageResults/DFA', format='png')
     g.attr(rankdir='LR')
     for state in DFA.states:
         g.node(str(state.label), shape='circle')
