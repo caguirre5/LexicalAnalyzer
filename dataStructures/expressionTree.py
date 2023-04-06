@@ -1,4 +1,4 @@
-from node import Node
+from dataStructures.node import Node
 
 
 def buildTreeExpression(postfix):
