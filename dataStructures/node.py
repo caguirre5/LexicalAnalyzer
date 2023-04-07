@@ -1,3 +1,7 @@
+class Token:
+    def __init__(self, value):
+        self.value = value
+
 class Node:
     def __init__(self, value):
         self.isRoot = False
