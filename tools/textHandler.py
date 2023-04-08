@@ -36,13 +36,13 @@ def infix_to_postfix(exp):
 
 
 def infix_to_postfix2(exp):
-    infix = input_transform(exp)
+    infix = input_transform2(exp)
     precedence = {'*': 3, '+': 3, '?': 3, '.': 2, '|': 1}
     postfix = []
     stack = []
     alphabet = []
 
-    for char in exp:
+    for char in infix:
         if char in list(precedence.keys()):
             while stack and stack[-1] != '(' and precedence.get(stack[-1], 0) >= precedence[char]:
                 postfix.append(stack.pop())
@@ -80,11 +80,12 @@ def input_transform(exp):
 def input_transform2(exp):
     # Agregar concatenación implícita
     result = []
-    for i in range(len(exp)):
-        result.append(exp[i])
+    for i, elem in enumerate(exp):
+        result.append(elem)
         if i + 1 < len(exp):
-            if (exp[i] != '(' and exp[i] != '|' and exp[i + 1] != ')' and exp[i + 1] != '|' and exp[i + 1] != '*' and exp[i + 1] != '+' and exp[i + 1] != '?'):
+            if (elem != '(' and elem != '|' and exp[i + 1] != ')' and exp[i + 1] != '|' and exp[i + 1] != '*' and exp[i + 1] != '+' and exp[i + 1] != '?'):
                 result.append('.')
+
     return (result)
 
 def is_valid_regex(regex):

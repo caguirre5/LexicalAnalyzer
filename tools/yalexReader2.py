@@ -63,14 +63,15 @@ class yalReader:
     
     def getCharSet(self, start, end):
         i = start
-        string = [chr(i)]
+        lista = [chr(i)]
         while i < end:
             i = i + 1
             if i == 91:
                 i = 97
-            string.append('|')
-            string.append(chr(i))
-        return string
+            lista.append('|')
+            lista.append(chr(i))
+
+        return lista
 
     
     def delimConstruction(self, line):
@@ -83,6 +84,8 @@ class yalReader:
             for i, char in enumerate(line):
                 if validating:
                     if char == "'":
+                        if symbol == ' ':
+                            symbol= "0"
                         symbolSet.extend([symbol,'|'])
                         validating = False
                         symbol=''
@@ -93,6 +96,8 @@ class yalReader:
 
         if len(symbolSet)>0:
             symbolSet.pop()
+            symbolSet.insert(0,'(')
+            symbolSet.append(')')
             return symbolSet
 
 
@@ -112,6 +117,8 @@ class yalReader:
                 symbolSet.append('|')
         if len(symbolSet)>0:
             symbolSet.pop()
+            symbolSet.insert(0,'(')
+            symbolSet.append(')')
             return symbolSet
 
 
@@ -119,6 +126,15 @@ class yalReader:
         meg_expression = ''
         for key in tokens.keys():
             meg_expression += tokens[key] + '|'
+        return meg_expression[:-1]
+    
+    def concatExpressions2(self, tokens):
+        meg_expression = []
+        for key in tokens.keys():
+            sub_expression = []
+            for elem in tokens[key]:
+                meg_expression.append()
+                # tokens[key] + '|'
         return meg_expression[:-1]
 
     def printTokens(self, tokens):

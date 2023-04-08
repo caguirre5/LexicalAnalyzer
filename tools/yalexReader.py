@@ -6,10 +6,9 @@ class yalReader:
         
         with open(path) as file:
             self.tokensDict = self.initializeTokens(file)
-
-            self.tokensDict = self.getTokensTransformation(self.tokensDict)
-
-            self.regex = self.concatExpressions(self.tokensDict)
+  
+        self.tokensDict = self.getTokensTransformation(self.tokensDict)
+        self.regex = self.concatExpressions(self.tokensDict)
 
     def initializeTokens(self, file):
         tokens = {}
@@ -19,14 +18,15 @@ class yalReader:
             if line[0:3] == 'let':
                 line = line[3:]
                 pos = line.find('=')
-                tokens[line[:pos].strip()] = line[pos+1:].strip()
+                value = line[pos+1:].strip()
+                value = self.otherConstruction(value)
+                tokens[line[:pos].strip()] = value
         return tokens
 
 
     def generate_regex(self, token, productions):
         production = productions[token]
-        # print('production -> ',production)
-        # Check if the production is a terminal (i.e. doesn't reference other tokens)
+        # Chequeamos si la produccion es un terminal, si lo es, solo retornamos la misma produccion
         if not any([t in production for t in productions.keys()]):
             new_value = self.charSetConstruction(production)
             if new_value:
@@ -36,7 +36,7 @@ class yalReader:
                 production = new_value
             return f"{production}"
 
-        # Replace each referenced token with its corresponding regex
+        # Reemplazamos cada simbolo no terminal con su respectivo terminal
         for t in productions.keys():
             #Encontramos el char que sigue despues del token evaluado
             pos = production.find(t) + len(t)
@@ -64,28 +64,46 @@ class yalReader:
                 i = 97
             string += '|'+chr(i)
         return string
+    
+    def otherConstruction(self, line):
+        line = line.replace('["\\s\\t\\n"]', "(^|@|&)")
+        line = line.replace("['+''-']", "(>|<)")
+        line = line.replace("'E'", "E")
+        line = line.replace("(_)", "(~)")
+        line = line.replace(".", "#")
+        return line
 
     
     def delimConstruction(self, line):
         symbolSet = ''
         symbol = ''
         validating = False
-        if '["\s\t\n"]' in line:
-            symbolSet = "░|▒|▓"
-        else:
-            for i, char in enumerate(line):
-                if validating:
-                    if char == "'":
-                        symbolSet = symbolSet + symbol
-                        if line[i+1] != ']':
-                            symbolSet += '|'
-                        symbol = ''
-                        validating = False
-                    else:
-                        symbolSet = symbolSet + char
-                elif char == "'":
-                    validating = True
+        comilla_found = False
+        if '["\\s\\t\\n"]' in line:
+            line = line.replace('["\\s\\t\\n"]', '&|@|$')
+        for i, char in enumerate(line):
+            if validating:
+                if char == "'":
+                    if symbol == ' ':
+                        symbol='~'
+                    elif symbol == '\\n':
+                        symbol='$'
+                    elif symbol == '\\t':
+                        symbol='@'
+                    symbolSet += symbol + '|'
+                    symbol = ''
+                    validating = False
+                else:
+                    symbol += char
+                    # symbolSet = symbolSet + char
+            elif char == "'":
+                validating = True
+            if char == '"' :
+                comilla_found = not comilla_found
+            elif comilla_found:
+                symbolSet += f"{char}|"
 
+        symbolSet=symbolSet[:-1]
         if len(symbolSet) > 0:
             return f"({symbolSet})"
 
